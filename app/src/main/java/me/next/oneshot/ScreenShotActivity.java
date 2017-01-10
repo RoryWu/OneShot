@@ -81,14 +81,16 @@ public class ScreenShotActivity extends AppCompatActivity {
                     public void run() {
                         Image image = mImageReader.acquireLatestImage();
 
-                        int width = image.getWidth();
+                        int width = image.getWidth();                   //Nexus6 imageWidth : 1440 * 4 = 5760
                         int height = image.getHeight();
 
+                        //http://ranlic.iteye.com/blog/1313735
                         final Image.Plane[] planes = image.getPlanes();
                         final ByteBuffer buffer = planes[0].getBuffer();
-                        int pixelStride = planes[0].getPixelStride();
-                        int rowStride = planes[0].getRowStride();
-                        int rowPadding = rowStride - pixelStride * width;
+                        int pixelStride = planes[0].getPixelStride();   //像素跨度  Nexus6 = 4
+                        int rowStride = planes[0].getRowStride();       //行跨度    Nexus6 = 6656
+
+                        int rowPadding = rowStride - pixelStride * width;   //896
                         // create bitmap
                         Bitmap bmp = Bitmap.createBitmap(width + rowPadding / pixelStride,
                                 height, Bitmap.Config.ARGB_8888); //Bitmap.Config.RGB_565
@@ -100,12 +102,14 @@ public class ScreenShotActivity extends AppCompatActivity {
                             bmp.getPixels(pixel, 0, width + rowPadding / pixelStride, 0, 0, width + rowPadding / pixelStride, 1);
                             int leftPadding = 0;
                             int rightPadding = width + rowPadding / pixelStride;
+                            //从最左到右判断是否有颜色填充 --->
                             for (int i = 0; i < pixel.length; i++) {
                                 if (pixel[i] != 0) {
                                     leftPadding = i;
                                     break;
                                 }
                             }
+                            //从最右到左判断是否有颜色填充 <---
                             for (int i = pixel.length - 1; i >= 0; i--) {
                                 if (pixel[i] != 0) {
                                     rightPadding = i;
