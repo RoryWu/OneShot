@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/activity_screen_shot"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="me.next.oneshot.ScreenShotActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hahahahah"/>
+
+    <Button
+        android:id="@+id/bt_take_screen_shot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_take_screen_shot"/>
+
+    <ImageView
+        android:id="@+id/iv_img"
+        android:layout_width="200dp"
+        android:layout_height="200dp"/>
+
+</LinearLayout>
