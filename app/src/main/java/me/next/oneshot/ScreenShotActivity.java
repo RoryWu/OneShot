@@ -33,7 +33,6 @@ public class ScreenShotActivity extends AppCompatActivity {
     MediaProjectionManager mMediaProjectionManager;
     MediaProjection mProjection;
     ImageReader mImageReader;
-
     Handler handler;
 
     private int screenWidth = 0;
@@ -57,6 +56,8 @@ public class ScreenShotActivity extends AppCompatActivity {
         screenWidth = ScreenUtils.getScreenWidth(ScreenShotActivity.this);
         screenHeight = ScreenUtils.getScreenHeight(ScreenShotActivity.this);
 
+        LogUtils.e("screenWidth : " + screenWidth);
+        LogUtils.e("screenHeight : " + screenHeight);
         LogUtils.e("screenDensity : " + screenDensity);
 
         handler = new Handler();
@@ -72,14 +73,12 @@ public class ScreenShotActivity extends AppCompatActivity {
                     public void run() {
                         mProjection.createVirtualDisplay("screen-mirror", screenWidth, screenHeight, screenDensity,
                                 DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mImageReader.getSurface(), null, null);
-                        LogUtils.e("111111");
                     }
                 }, 10);
 
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        LogUtils.e("222222");
                         Image image = mImageReader.acquireLatestImage();
 
                         int width = image.getWidth();
@@ -87,7 +86,6 @@ public class ScreenShotActivity extends AppCompatActivity {
 
                         final Image.Plane[] planes = image.getPlanes();
                         final ByteBuffer buffer = planes[0].getBuffer();
-                        int offset = 0;
                         int pixelStride = planes[0].getPixelStride();
                         int rowStride = planes[0].getRowStride();
                         int rowPadding = rowStride - pixelStride * width;
@@ -96,6 +94,30 @@ public class ScreenShotActivity extends AppCompatActivity {
                                 height, Bitmap.Config.ARGB_8888); //Bitmap.Config.RGB_565
                         bmp.copyPixelsFromBuffer(buffer);
                         image.close();
+                        //截取黑边
+                        if (width != screenWidth || rowPadding != 0) {
+                            int[] pixel = new int[width + rowPadding / pixelStride];
+                            bmp.getPixels(pixel, 0, width + rowPadding / pixelStride, 0, 0, width + rowPadding / pixelStride, 1);
+                            int leftPadding = 0;
+                            int rightPadding = width + rowPadding / pixelStride;
+                            for (int i = 0; i < pixel.length; i++) {
+                                if (pixel[i] != 0) {
+                                    leftPadding = i;
+                                    break;
+                                }
+                            }
+                            for (int i = pixel.length - 1; i >= 0; i--) {
+                                if (pixel[i] != 0) {
+                                    rightPadding = i;
+                                    break;
+                                }
+                            }
+                            width = Math.min(width, screenHeight);
+                            if (rightPadding - leftPadding > width) {
+                                rightPadding = width;
+                            }
+                            bmp = Bitmap.createBitmap(bmp, leftPadding, 0, rightPadding - leftPadding, height);
+                        }
 
                         String imagePath = CapturePhotoUtils.insertImage(
                                 getContentResolver(),
@@ -139,6 +161,20 @@ public class ScreenShotActivity extends AppCompatActivity {
                         screenHeight, PixelFormat.RGBA_8888, 2); //ImageFormat.RGB_565 cast error
             }
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void stopMediaProjection() {
+        if (mProjection != null) {
+            mProjection.stop();
+            mProjection = null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopMediaProjection();
     }
 
 }

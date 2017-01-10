@@ -23,6 +23,16 @@
         <activity android:name=".ScreenShotActivity"
             android:theme="@style/ScreenShotTheme">
         </activity>
+
+        <service android:name=".services.OneShotTileService"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/tile_description"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TITLE"/>
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

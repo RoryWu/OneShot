@@ -3,4 +3,5 @@
     <string name="button_screen_shot">屏幕截图</string>
     <string name="target_sdk_must_greater_than_lollipop">Android 5.0 以下手机暂时无法使用该功能</string>
     <string name="button_take_screen_shot">截图</string>
+    <string name="tile_description">截图快捷方式</string>
 </resources>
