@@ -1,10 +1,15 @@
 package me.next.oneshot;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
@@ -29,6 +34,30 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        showNotificationCenter();
+
+    }
+
+    private void showNotificationCenter() {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle("OneShot")
+                        .setContentText("点击进行屏幕截图");
+
+        Intent resultIntent = new Intent(this, ScreenShotActivity.class);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, 0);
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        Notification notification = mBuilder.build();
+        notification.flags = Notification.FLAG_ONGOING_EVENT;
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        // mId allows you to update the notification later on.
+        mNotificationManager.notify(1024, notification);
     }
 
     private void detectPermission() {
