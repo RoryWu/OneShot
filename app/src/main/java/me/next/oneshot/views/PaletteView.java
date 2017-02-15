@@ -110,6 +110,20 @@ public class PaletteView extends View {
         return path;
     }
 
+    public void undo() {
+        if (historyPointer > 0) {
+            historyPointer--;
+            invalidate();
+        }
+    }
+
+    public void redo() {
+        if (historyPointer < pathList.size()) {
+            historyPointer++;
+            invalidate();
+        }
+    }
+
     private Path getCurrentPath() {
         return pathList.get(historyPointer - 1);
     }

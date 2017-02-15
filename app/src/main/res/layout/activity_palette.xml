@@ -5,6 +5,7 @@
               android:layout_height="match_parent">
 
     <me.next.oneshot.views.PaletteView
+        android:id="@+id/palette_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
