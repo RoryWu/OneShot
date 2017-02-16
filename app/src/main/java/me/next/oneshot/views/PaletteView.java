@@ -69,6 +69,7 @@ public class PaletteView extends View {
             Paint paint = this.paintList.get(i);
             canvas.drawPath(path, paint);
         }
+        //http://stackoverflow.com/questions/8287949/android-how-to-draw-a-smooth-line-following-your-finger
     }
 
     @Override

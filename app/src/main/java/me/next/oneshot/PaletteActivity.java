@@ -1,10 +1,16 @@
 package me.next.oneshot;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import me.next.oneshot.utils.CapturePhotoUtils;
+import me.next.oneshot.utils.ImageUtils;
 import me.next.oneshot.views.PaletteView;
 
 /**
@@ -13,14 +19,30 @@ import me.next.oneshot.views.PaletteView;
 
 public class PaletteActivity extends AppCompatActivity {
 
+    FrameLayout flMain;
+    ImageView mImageView;
     PaletteView paletteView;
+
+    int imageWidth;
+    int imageHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_palette);
 
+        flMain = (FrameLayout) findViewById(R.id.fl_main);
+        mImageView = (ImageView) findViewById(R.id.iv_image);
         paletteView = (PaletteView) findViewById(R.id.palette_view);
+
+        mImageView.setImageResource(R.mipmap.ic_launcher);
+
+        imageWidth = mImageView.getDrawable().getIntrinsicWidth();
+        imageHeight = mImageView.getDrawable().getIntrinsicHeight();
+
+        paletteView.getLayoutParams().width = imageWidth;
+        paletteView.getLayoutParams().height = imageHeight;
+
     }
 
     @Override
@@ -37,6 +59,13 @@ public class PaletteActivity extends AppCompatActivity {
                 break;
             case R.id.undo:
                 paletteView.undo();
+                break;
+            case R.id.save:
+                Bitmap bitmap = ImageUtils.getBitmapFromView(flMain);
+                String imagePath = CapturePhotoUtils.insertImage(
+                        getContentResolver(),
+                        bitmap, "title", "desc...");
+                Toast.makeText(getApplicationContext(), "图片已保存到: " + imagePath, Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onOptionsItemSelected(item);
