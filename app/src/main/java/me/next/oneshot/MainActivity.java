@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
@@ -46,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle("OneShot")
                         .setContentText("点击进行屏幕截图");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            mBuilder.setPriority(Notification.PRIORITY_MIN); // notification icon won't show up on the statusbar
+        }
 
         Intent resultIntent = new Intent(this, ScreenShotActivity.class);
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
