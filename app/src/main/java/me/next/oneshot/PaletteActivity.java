@@ -1,13 +1,18 @@
 package me.next.oneshot;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.io.File;
 
 import me.next.oneshot.utils.CapturePhotoUtils;
 import me.next.oneshot.utils.ImageUtils;
@@ -35,13 +40,33 @@ public class PaletteActivity extends AppCompatActivity {
         mImageView = (ImageView) findViewById(R.id.iv_image);
         paletteView = (PaletteView) findViewById(R.id.palette_view);
 
-        mImageView.setImageResource(R.mipmap.ic_launcher);
+        Uri imageUri = Uri.parse(getIntent().getStringExtra("imagePath"));
+        String imagePath = ImageUtils.getRealPathFromUri(getApplicationContext(), imageUri);
+        mImageView.setImageURI(Uri.fromFile(new File(imagePath)));
 
-        imageWidth = mImageView.getDrawable().getIntrinsicWidth();
-        imageHeight = mImageView.getDrawable().getIntrinsicHeight();
+        ViewTreeObserver vto = mImageView.getViewTreeObserver();
+        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            public boolean onPreDraw() {
+                mImageView.getViewTreeObserver().removeOnPreDrawListener(this);
+                imageWidth = mImageView.getMeasuredWidth();
+                imageHeight = mImageView.getMeasuredHeight();
 
-        paletteView.getLayoutParams().width = imageWidth;
-        paletteView.getLayoutParams().height = imageHeight;
+                if (imageWidth < 500 && imageHeight < 500) {
+                    imageWidth = imageWidth * 2;
+                    imageHeight = imageHeight * 2;
+                    mImageView.getLayoutParams().width = imageWidth;
+                    mImageView.getLayoutParams().height = imageHeight;
+                    mImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                }
+
+                Log.e("OneShot", "imageWidth : " + imageWidth);
+                Log.e("OneShot", "imageHeight : " + imageHeight);
+
+                paletteView.getLayoutParams().width = imageWidth;
+                paletteView.getLayoutParams().height = imageHeight;
+                return true;
+            }
+        });
 
     }
 

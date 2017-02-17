@@ -157,10 +157,15 @@ public class ScreenShotActivity extends AppCompatActivity {
                 }
 
                 if (cut_width > 0 && cut_height > 0) {
-                    Bitmap cutBitmap = Bitmap.createBitmap(bmp, left, top, cut_width, cut_height);
+                    final Bitmap cutBitmap = Bitmap.createBitmap(bmp, left, top, cut_width, cut_height);
                     String imagePath = CapturePhotoUtils.insertImage(
                             getContentResolver(),
                             cutBitmap, "title", "desc...");
+                    finish();
+                    Intent intent = new Intent(getApplicationContext(), PaletteActivity.class);
+                    intent.putExtra("imagePath", imagePath);
+                    ScreenShotActivity.this.startActivity(intent);
+
                 }
                 /*
                 File localFile = new File(SD.getProjectImageDir(OneShotApplication.getInstance()), "temp.png");

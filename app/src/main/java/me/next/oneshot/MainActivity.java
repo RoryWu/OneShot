@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bt_screen_shot).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                finish();
                 Intent intent = new Intent(MainActivity.this, ScreenShotActivity.class);
                 startActivity(intent);
             }

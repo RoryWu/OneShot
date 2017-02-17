@@ -11,6 +11,12 @@
     <style name="ScreenShotTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/FadeInOutStyle</item>
+    </style>
+
+    <style name="FadeInOutStyle">
+        <item name="android:windowEnterAnimation">@anim/fadeout</item>
+        <item name="android:windowExitAnimation">@anim/fadein</item>
     </style>
 
 </resources>
