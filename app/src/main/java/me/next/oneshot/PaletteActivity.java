@@ -1,12 +1,14 @@
 package me.next.oneshot;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -42,25 +44,33 @@ public class PaletteActivity extends AppCompatActivity {
 
         Uri imageUri = Uri.parse(getIntent().getStringExtra("imagePath"));
         String imagePath = ImageUtils.getRealPathFromUri(getApplicationContext(), imageUri);
-        mImageView.setImageURI(Uri.fromFile(new File(imagePath)));
+        final File imageFile = new File(imagePath);
+        mImageView.setImageURI(Uri.fromFile(imageFile));
+
+        BitmapFactory.Options dimensions = new BitmapFactory.Options();
+        dimensions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(imagePath, dimensions);
+        final int height = dimensions.outHeight;
+        final int width = dimensions.outWidth;
 
         ViewTreeObserver vto = mImageView.getViewTreeObserver();
         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             public boolean onPreDraw() {
                 mImageView.getViewTreeObserver().removeOnPreDrawListener(this);
-                imageWidth = mImageView.getMeasuredWidth();
-                imageHeight = mImageView.getMeasuredHeight();
 
-                if (imageWidth < 500 && imageHeight < 500) {
-                    imageWidth = imageWidth * 2;
-                    imageHeight = imageHeight * 2;
-                    mImageView.getLayoutParams().width = imageWidth;
-                    mImageView.getLayoutParams().height = imageHeight;
-                    mImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                int rootViewHeight = flMain.getMeasuredHeight();
+
+                if (height > rootViewHeight) {
+                    mImageView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+                    mImageView.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    mImageView.setAdjustViewBounds(true);
+                    float ratio = ((float) rootViewHeight / (float) height);
+                    imageWidth = (int) (ratio * width);
+                } else {
+                    imageWidth = mImageView.getMeasuredWidth();
                 }
 
-                Log.e("OneShot", "imageWidth : " + imageWidth);
-                Log.e("OneShot", "imageHeight : " + imageHeight);
+                imageHeight = mImageView.getMeasuredHeight();
 
                 paletteView.getLayoutParams().width = imageWidth;
                 paletteView.getLayoutParams().height = imageHeight;
