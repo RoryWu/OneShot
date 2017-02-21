@@ -27,7 +27,7 @@
         </activity>
 
         <service android:name=".services.OneShotTileService"
-            android:icon="@drawable/close_white"
+            android:icon="@drawable/ic_tile"
             android:label="@string/tile_description"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
