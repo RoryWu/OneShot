@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
-    android:id="@+id/fl_main"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/crop__texture">
 
-    <!-- adjustViewBounds : 图片按照原始比例显示
-            see: http://stackoverflow.com/questions/7719617/imageview-adjustviewbounds-not-working/7732684#7732684 -->
-    <ImageView
-        android:id="@+id/iv_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/app_name"/>
-
-    <me.next.oneshot.views.PaletteView
-        android:id="@+id/palette_view"
+    <FrameLayout
+        android:id="@+id/fl_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        tools:ignore="UselessParent">
+
+        <!-- adjustViewBounds : 图片按照原始比例显示
+            see: http://stackoverflow.com/questions/7719617/imageview-adjustviewbounds-not-working/7732684#7732684 -->
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_name"/>
+
+        <me.next.oneshot.views.PaletteView
+            android:id="@+id/palette_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"/>
+
+    </FrameLayout>
 
 </FrameLayout>

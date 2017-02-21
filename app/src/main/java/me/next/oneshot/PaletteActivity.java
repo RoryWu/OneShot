@@ -75,6 +75,11 @@ public class PaletteActivity extends AppCompatActivity {
                 params.height = imageHeight;
                 paletteView.setLayoutParams(params);
 
+                FrameLayout.LayoutParams flParams = ((FrameLayout.LayoutParams) flMain.getLayoutParams());
+                params.width = imageWidth;
+                params.height = imageHeight;
+                flMain.setLayoutParams(flParams);
+
                 return true;
             }
         });
