@@ -13,13 +13,18 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import me.next.oneshot.utils.PermissionUtils;
+import me.next.oneshot.utils.SPUtils;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_CODE = 1;
+
+    private Switch mSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +32,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         detectPermission();
+
+        mSwitch = (Switch) findViewById(R.id.switch_notification_center);
+
+        mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                updateNotificationCenter(b);
+                SPUtils.updateNotification(b);
+            }
+        });
 
         findViewById(R.id.bt_screen_shot).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,8 +52,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        showNotificationCenter();
+        boolean showNotificationCenter = SPUtils.showNotificationCenter();
+        mSwitch.setChecked(showNotificationCenter);
+        updateNotificationCenter(showNotificationCenter);
 
+    }
+
+    private void updateNotificationCenter(boolean showNotificationCenter) {
+        if (showNotificationCenter) {
+            showNotificationCenter();
+        } else {
+            NotificationManager mNotificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.cancel(1024);
+        }
     }
 
     private void showNotificationCenter() {

@@ -8,14 +8,16 @@ import android.app.Application;
 
 public class OneShotApplication extends Application {
 
-    private static class OneShotApplicationHolder {
-        private static OneShotApplication oneShotApplication = new OneShotApplication();
-    }
-
-    public OneShotApplication() {
-    }
+    private static OneShotApplication oneShotApplication;
 
     public static OneShotApplication getInstance() {
-        return OneShotApplicationHolder.oneShotApplication;
+        return oneShotApplication;
     }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        oneShotApplication = this;
+    }
+
 }

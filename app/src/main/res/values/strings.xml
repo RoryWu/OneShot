@@ -1,11 +1,14 @@
 <resources>
     <string name="app_name">OneShot</string>
-    <string name="button_screen_shot">屏幕截图</string>
+    <string name="button_screen_shot">开始截图</string>
     <string name="target_sdk_must_greater_than_lollipop">Android 5.0 以下手机暂时无法使用该功能</string>
     <string name="button_take_screen_shot">截图</string>
     <string name="tile_description">截图</string>
     <string name="menu_redo">重做</string>
     <string name="menu_undo">撤销</string>
     <string name="menu_save">保存</string>
+    <string name="title_show_on_notification_center">在通知栏显示</string>
+    <string name="content_show_on_notification_center">通知栏下拉菜单添加截屏入口</string>
+    <string name="preference_file_name">OneShot</string>
     <!--<string name="tile_description">截图快捷方式</string>-->
 </resources>
