@@ -23,8 +23,8 @@ import java.nio.ByteBuffer;
 
 import me.next.captureview.CaptureView;
 import me.next.captureview.OnButtonClickListener;
-import me.next.oneshot.utils.CapturePhotoUtils;
 import me.next.oneshot.utils.LogUtils;
+import me.next.oneshot.utils.SD;
 import me.next.oneshot.utils.ScreenUtils;
 import me.next.oneshot.utils.ToastUtils;
 
@@ -158,9 +158,12 @@ public class ScreenShotActivity extends AppCompatActivity {
 
                 if (cut_width > 0 && cut_height > 0) {
                     final Bitmap cutBitmap = Bitmap.createBitmap(bmp, left, top, cut_width, cut_height);
+                    String imagePath = SD.saveBitmap(getApplicationContext(), cutBitmap, "temp");
+                    /*
                     String imagePath = CapturePhotoUtils.insertImage(
                             getContentResolver(),
                             cutBitmap, "title", "desc...");
+                            */
                     finish();
                     Intent intent = new Intent(getApplicationContext(), PaletteActivity.class);
                     intent.putExtra("imagePath", imagePath);
@@ -190,7 +193,7 @@ public class ScreenShotActivity extends AppCompatActivity {
 
                 bmp.recycle();
             }
-        }, 100);
+        }, 200);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

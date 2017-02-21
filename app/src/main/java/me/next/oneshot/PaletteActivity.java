@@ -15,8 +15,8 @@ import android.widget.Toast;
 
 import java.io.File;
 
-import me.next.oneshot.utils.CapturePhotoUtils;
 import me.next.oneshot.utils.ImageUtils;
+import me.next.oneshot.utils.SD;
 import me.next.oneshot.views.PaletteView;
 
 /**
@@ -41,8 +41,7 @@ public class PaletteActivity extends AppCompatActivity {
         mImageView = (ImageView) findViewById(R.id.iv_image);
         paletteView = (PaletteView) findViewById(R.id.palette_view);
 
-        Uri imageUri = Uri.parse(getIntent().getStringExtra("imagePath"));
-        String imagePath = ImageUtils.getRealPathFromUri(getApplicationContext(), imageUri);
+        String imagePath = getIntent().getStringExtra("imagePath");
         final File imageFile = new File(imagePath);
         mImageView.setImageURI(Uri.fromFile(imageFile));
 
@@ -103,10 +102,11 @@ public class PaletteActivity extends AppCompatActivity {
                 break;
             case R.id.save:
                 Bitmap bitmap = ImageUtils.getBitmapFromView(flMain);
-                String imagePath = CapturePhotoUtils.insertImage(
-                        getContentResolver(),
-                        bitmap, "title", "desc...");
-                Toast.makeText(getApplicationContext(), "图片已保存到: " + imagePath, Toast.LENGTH_SHORT).show();
+                String filePath = SD.savePublicBitmap(getApplicationContext(), bitmap, "");
+//                String imagePath = CapturePhotoUtils.insertImage(
+//                        getContentResolver(),
+//                        bitmap, "title", "desc...");
+                Toast.makeText(getApplicationContext(), "图片已保存到: " + filePath, Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onOptionsItemSelected(item);
