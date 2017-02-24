@@ -98,6 +98,12 @@ public class PaletteView extends View {
     }
 
     private void updateHistory(Path path) {
+        if (historyPointer != pathList.size()) { //进行过撤销操作，清理之前撤销的历史记录
+            for (int i = pathList.size() - 1; i >= historyPointer; i--) {
+                pathList.remove(i);
+                paintList.remove(i);
+            }
+        }
         pathList.add(path);
         paintList.add(createPaint());
         historyPointer++;
@@ -127,6 +133,10 @@ public class PaletteView extends View {
 
     private Path getCurrentPath() {
         return pathList.get(historyPointer - 1);
+    }
+
+    public void setPaintStrokeWidth(float paintStrokeWidth) {
+        this.paintStrokeWidth = paintStrokeWidth;
     }
 
 }
