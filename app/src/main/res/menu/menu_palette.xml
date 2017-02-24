@@ -5,13 +5,18 @@
     <item
         android:id="@+id/undo"
         android:title="@string/menu_undo"
-        app:showAsAction="always"
         tools:ignore="AlwaysShowAction,AppCompatResource">
     </item>
 
     <item
         android:id="@+id/redo"
         android:title="@string/menu_redo"
+        tools:ignore="AppCompatResource">
+    </item>
+
+    <item
+        android:id="@+id/share"
+        android:title="@string/menu_share"
         app:showAsAction="always"
         tools:ignore="AppCompatResource">
     </item>

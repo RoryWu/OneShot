@@ -23,7 +23,6 @@ import java.nio.ByteBuffer;
 
 import me.next.captureview.CaptureView;
 import me.next.captureview.OnButtonClickListener;
-import me.next.oneshot.utils.LogUtils;
 import me.next.oneshot.utils.SD;
 import me.next.oneshot.utils.ScreenUtils;
 import me.next.oneshot.utils.ToastUtils;
@@ -70,10 +69,6 @@ public class ScreenShotActivity extends AppCompatActivity {
         screenDensity = metrics.densityDpi;
         screenWidth = ScreenUtils.getScreenWidth(ScreenShotActivity.this);
         screenHeight = ScreenUtils.getScreenHeight(ScreenShotActivity.this);
-
-        LogUtils.e("screenWidth : " + screenWidth);
-        LogUtils.e("screenHeight : " + screenHeight);
-        LogUtils.e("screenDensity : " + screenDensity);
 
         handler = new Handler();
 
@@ -159,38 +154,12 @@ public class ScreenShotActivity extends AppCompatActivity {
                 if (cut_width > 0 && cut_height > 0) {
                     final Bitmap cutBitmap = Bitmap.createBitmap(bmp, left, top, cut_width, cut_height);
                     String imagePath = SD.saveBitmap(getApplicationContext(), cutBitmap, "temp");
-                    /*
-                    String imagePath = CapturePhotoUtils.insertImage(
-                            getContentResolver(),
-                            cutBitmap, "title", "desc...");
-                            */
                     finish();
                     Intent intent = new Intent(getApplicationContext(), PaletteActivity.class);
                     intent.putExtra("imagePath", imagePath);
                     ScreenShotActivity.this.startActivity(intent);
 
                 }
-                /*
-                File localFile = new File(SD.getProjectImageDir(OneShotApplication.getInstance()), "temp.png");
-                String fileName=localFile.getAbsolutePath();
-                LogUtils.e("文件路径: " + fileName);
-                try {
-                    if (!localFile.exists()) {
-                        localFile.createNewFile();
-                    }
-                    FileOutputStream fileOutputStream = new FileOutputStream(localFile);
-                    if (fileOutputStream != null) {
-                        bmp.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-                        fileOutputStream.flush();
-                        fileOutputStream.close();
-                    }
-                } catch (IOException e) {
-                }
-                */
-
-//                        ImageView imageView = (ImageView) findViewById(R.id.iv_img);
-//                        imageView.setImageBitmap(bmp);
-
                 bmp.recycle();
             }
         }, 200);
