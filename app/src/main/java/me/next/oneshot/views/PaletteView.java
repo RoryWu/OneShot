@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -139,4 +140,11 @@ public class PaletteView extends View {
         this.paintStrokeWidth = paintStrokeWidth;
     }
 
+    public void setPaintStrokeColor(@ColorInt int paintStrokeColor) {
+        this.paintStrokeColor = paintStrokeColor;
+    }
+
+    public int getPaintStrokeColor() {
+        return paintStrokeColor;
+    }
 }

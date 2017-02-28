@@ -1,1 +1,1 @@
-include ':app', ':captureview'
+include ':app', ':captureview', ':colorpicker-library', ':floating-action-button'

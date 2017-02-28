@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -31,11 +32,72 @@
 
     </FrameLayout>
 
-    <FrameLayout
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fam_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:menu_colorNormal="@color/colorAccent"
+        app:menu_colorPressed="@color/white"
+        app:menu_colorRipple="#99FFFFFF"
+        app:menu_icon="@drawable/ic_edit"
+        app:menu_labels_margin="8dp">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_paint_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/gesture"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_colorPressed="@color/colorAccent"
+            app:fab_colorRipple="#99FFFFFF"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_paint_large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dot_large"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_colorPressed="@color/colorAccent"
+            app:fab_colorRipple="#99FFFFFF"
+            app:fab_shadowColor="#66000000"
+            app:fab_shadowRadius="4dp"
+            app:fab_showShadow="true"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_paint_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dot_mid"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_colorPressed="@color/colorAccent"
+            app:fab_colorRipple="#99FFFFFF"
+            app:fab_shadowColor="#66000000"
+            app:fab_shadowRadius="4dp"
+            app:fab_showShadow="true"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_paint_small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dot_small"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_colorPressed="@color/colorAccent"
+            app:fab_colorRipple="#99FFFFFF"
+            app:fab_shadowColor="#66000000"
+            app:fab_shadowRadius="4dp"
+            app:fab_showShadow="true"/>
+
+    </com.github.clans.fab.FloatingActionMenu>
+
+    <me.next.oneshot.views.DarkFrameLayout
         android:id="@+id/fl_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#aa000000"
         android:visibility="gone">
 
         <TextView
@@ -46,6 +108,6 @@
             android:textColor="@color/white"
             android:textSize="16sp"/>
 
-    </FrameLayout>
+    </me.next.oneshot.views.DarkFrameLayout>
 
 </FrameLayout>
