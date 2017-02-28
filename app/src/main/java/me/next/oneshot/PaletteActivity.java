@@ -183,7 +183,7 @@ public class PaletteActivity extends AppCompatActivity {
                         if (color == getResources().getColor(R.color.black)) {
                             floatingActionsMenu.setMenuButtonColorNormal(getResources().getColor(R.color.colorAccent));
                         } else {
-                            floatingActionsMenu.setMenuButtonColorNormal(getResources().getColor(R.color.black));
+                            floatingActionsMenu.setMenuButtonColorNormal(getResources().getColor(R.color.colorPrimaryDark));
                         }
                     }
 
@@ -199,7 +199,7 @@ public class PaletteActivity extends AppCompatActivity {
         if (color == getResources().getColor(R.color.black)) {
             fabPaint.setColorNormal(getResources().getColor(R.color.colorAccent));
         } else {
-            fabPaint.setColorNormal(getResources().getColor(R.color.black));
+            fabPaint.setColorNormal(getResources().getColor(R.color.colorPrimaryDark));
         }
         Drawable drawable = fabPaint.getIconDrawable();
         drawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);

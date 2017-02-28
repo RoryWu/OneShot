@@ -76,6 +76,7 @@ public class ScreenShotActivity extends AppCompatActivity {
         startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(), MEDIA_PROJECT_REQUEST_CODE);
 
         CaptureView captureView = (CaptureView) findViewById(R.id.cv_main);
+        captureView.setPaintColor(getResources().getColor(R.color.colorAccent));
         captureView.setOnButtonClickListener(new OnButtonClickListener() {
             @Override
             public void onConfirmClick(Rect rect) {

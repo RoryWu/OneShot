@@ -56,6 +56,8 @@ public class CaptureView extends View {
     private int buttonHeight;
     private int buttonWidth;
 
+    private int paintColor;
+
     Rect mSpecificRect = new Rect();
     Rect mSpecificBorderRect = new Rect();
     Paint mPaint = new Paint();
@@ -121,6 +123,8 @@ public class CaptureView extends View {
 
         mMenuBarWidth = mMenuBarPadding + buttonHeight * 2;
 
+        paintColor = getResources().getColor(R.color.color_button);
+
     }
 
     @Override
@@ -167,14 +171,14 @@ public class CaptureView extends View {
                 mSpecificRect.bottom + 1);
 
         mSpecificAreaBorderPaint.setStyle(Paint.Style.STROKE);
-        mSpecificAreaBorderPaint.setColor(getResources().getColor(R.color.color_button));
+        mSpecificAreaBorderPaint.setColor(paintColor);
         mSpecificAreaBorderPaint.setStrokeWidth(ScreenUtils.dipToPixels(getContext(), BORDER_STROKE_WIDTH));
         canvas.drawRect(mSpecificBorderRect, mSpecificAreaBorderPaint);
 
         if (showMenuBar) {
             mSpecificAreaPaint.setXfermode(null);
-            mSpecificAreaPaint.setColor(getResources().getColor(R.color.color_button));
-            mSpecificAreaPaint.setColorFilter(new PorterDuffColorFilter(getResources().getColor(R.color.color_button), PorterDuff.Mode.SRC_ATOP));
+            mSpecificAreaPaint.setColor(paintColor);
+            mSpecificAreaPaint.setColorFilter(new PorterDuffColorFilter(paintColor, PorterDuff.Mode.SRC_ATOP));
 
             canvas.drawBitmap(okButtonBitmap, null, mOkButtonRect, mSpecificAreaPaint);
             canvas.drawBitmap(cancelButtonBitmap, null, mCancelButtonRect, mSpecificAreaPaint);
@@ -503,5 +507,9 @@ public class CaptureView extends View {
 
     public void setOnButtonClickListener(OnButtonClickListener onButtonClickListener) {
         mOnButtonClickListener = onButtonClickListener;
+    }
+
+    public void setPaintColor(int paintColor) {
+        this.paintColor = paintColor;
     }
 }
