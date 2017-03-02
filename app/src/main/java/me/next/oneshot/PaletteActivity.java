@@ -76,6 +76,7 @@ public class PaletteActivity extends AppCompatActivity {
 
         initFab();
 
+//        final String imagePath = "/storage/emulated/0/Android/data/me.next.oneshot/files/Pictures/OneShot/temp";
         String imagePath = getIntent().getStringExtra("imagePath");
         final File imageFile = new File(imagePath);
         mImageView.setImageURI(Uri.fromFile(imageFile));
@@ -92,8 +93,18 @@ public class PaletteActivity extends AppCompatActivity {
                 mImageView.getViewTreeObserver().removeOnPreDrawListener(this);
 
                 int rootViewHeight = flMain.getMeasuredHeight();
+                int rootViewWidth = flMain.getMeasuredWidth();
 
-                if (height > rootViewHeight) {
+                if (height < rootViewHeight && width < rootViewWidth) { //图片宽高都没有超过 parent view 宽高
+                    float ratioHeight = ((float) rootViewHeight / (float) height);
+                    float ratioWidth = ((float) rootViewWidth / (float) width);
+                    if (ratioHeight < ratioWidth) {
+                        imageWidth = (int) (width * ratioHeight);
+                        mImageView.getLayoutParams().width = imageWidth;
+                    } else {
+                        imageWidth = rootViewWidth;
+                    }
+                } else if (height > rootViewHeight) {
                     mImageView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
                     mImageView.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
                     mImageView.setAdjustViewBounds(true);
