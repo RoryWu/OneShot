@@ -49,6 +49,33 @@
         android:layout_height=".5dp"
         android:background="#dedede"/>
 
+    <RelativeLayout
+        android:id="@+id/rl_pay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/tv_title_pay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_pay"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_content_pay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title_pay"
+            android:layout_marginTop="2dp"
+            android:text="@string/content_pay_desc"
+            android:textColor="@color/text_gray"
+            android:textSize="13sp"/>
+
+    </RelativeLayout>
+
     <Button
         android:id="@+id/bt_screen_shot"
         android:layout_width="wrap_content"

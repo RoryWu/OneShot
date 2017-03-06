@@ -14,5 +14,15 @@
     <string name="snack_action_send">分享</string>
     <string name="menu_share">分享</string>
     <string name="dialog_save_bitmap">保存图片…</string>
+    <string name="toast_alipay_client_not_found">你倒是先装个支付宝啊</string>
+    <string name="dialog_pay_title">尊敬的壕：</string>
+    <string name="dialog_button_wechat">微信</string>
+    <string name="dialog_button_alibaba">支付宝</string>
+    <string name="dialog_pay_message">来都来了，不打赏一点么~</string>
+    <string name="dialog_button_goodbye">我偏不</string>
+    <string name="toast_byebye">(ｏ￣∇￣)＝◯)`ν゜)･；\n[手动再见]</string>
+    <string name="content_pay_desc">来来来…快点一下</string>
+    <string name="title_pay">打赏作者</string>
+    <string name="toast_share_to_wechat">分享到自己的微信号，直接识别二维码</string>
     <!--<string name="tile_description">截图快捷方式</string>-->
 </resources>

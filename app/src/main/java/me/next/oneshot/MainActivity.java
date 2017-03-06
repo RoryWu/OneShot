@@ -16,9 +16,11 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import me.next.oneshot.utils.DialogUtils;
 import me.next.oneshot.utils.PermissionUtils;
 import me.next.oneshot.utils.SPUtils;
 
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 1;
 
     private Switch mSwitch;
+    private RelativeLayout tvPay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         detectPermission();
+
+        tvPay = (RelativeLayout) findViewById(R.id.rl_pay);
+        tvPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogUtils.showPayDialog(MainActivity.this);
+            }
+        });
 
         mSwitch = (Switch) findViewById(R.id.switch_notification_center);
 

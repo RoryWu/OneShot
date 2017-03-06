@@ -75,6 +75,13 @@ public class SD {
         return filePath;
     }
 
+    /**
+     * 保存到项目目录下
+     * @param context
+     * @param bitmap
+     * @param fileName
+     * @return
+     */
     public static String saveBitmap(Context context, Bitmap bitmap, String fileName) {
         File imgDir = getAlbumStorageDir(context, FOLDER_NAME);
         String filePath = createFile(bitmap, fileName, imgDir);
