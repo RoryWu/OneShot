@@ -40,6 +40,7 @@ public class CaptureView extends View {
 
     private static final int BUTTON_CANCEL = 5;
     private static final int BUTTON_CONFIRM = 6;
+    private static final int BUTTON_FULLSCREEN = 7;
 
     private int downX;
     private int downY;
@@ -66,8 +67,10 @@ public class CaptureView extends View {
 
     RectF mOkButtonRect = new RectF();
     RectF mCancelButtonRect = new RectF();
+    RectF mFullScreenButtonRect = new RectF();
     Bitmap okButtonBitmap;
     Bitmap cancelButtonBitmap;
+    Bitmap fullscreenButtonBitmap;
 
     //四个控制缩放按钮
     RectF mLeftTopButtonRect = new RectF();
@@ -97,7 +100,7 @@ public class CaptureView extends View {
     private int currentTouchButton = BUTTON_NONE;
     private OnButtonClickListener mOnButtonClickListener;
 
-    @IntDef({BUTTON_NONE, BUTTON_LEFT_TOP, BUTTON_RIGHT_TOP, BUTTON_LEFT_BOTTOM, BUTTON_RIGHT_BOTTOM})
+    @IntDef({BUTTON_NONE, BUTTON_LEFT_TOP, BUTTON_RIGHT_TOP, BUTTON_LEFT_BOTTOM, BUTTON_RIGHT_BOTTOM, BUTTON_FULLSCREEN})
     @Retention(RetentionPolicy.SOURCE)
     public @interface CurrentButton {}
 
@@ -117,11 +120,12 @@ public class CaptureView extends View {
 
         okButtonBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.check_white);
         cancelButtonBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.close_white);
+        fullscreenButtonBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fullscreen_white);
 
         buttonHeight = okButtonBitmap.getHeight();
         buttonWidth = okButtonBitmap.getWidth();
 
-        mMenuBarWidth = mMenuBarPadding + buttonHeight * 2;
+        mMenuBarWidth = mMenuBarPadding + buttonHeight * 3;
 
         paintColor = getResources().getColor(R.color.color_button);
 
@@ -182,6 +186,7 @@ public class CaptureView extends View {
 
             canvas.drawBitmap(okButtonBitmap, null, mOkButtonRect, mSpecificAreaPaint);
             canvas.drawBitmap(cancelButtonBitmap, null, mCancelButtonRect, mSpecificAreaPaint);
+            canvas.drawBitmap(fullscreenButtonBitmap, null, mFullScreenButtonRect, mSpecificAreaPaint);
 
             canvas.drawOval(mLeftTopButtonRect, mSpecificAreaPaint);
             canvas.drawOval(mRightTopButtonRect, mSpecificAreaPaint);
@@ -207,28 +212,31 @@ public class CaptureView extends View {
                 } else if (mCancelButtonRect.contains(downX, downY)) {
                     isTouchingButton = true;
                     currentTouchButton = BUTTON_CANCEL;
+                } else if (mFullScreenButtonRect.contains(downX, downY)) {
+                    isTouchingButton = true;
+                    currentTouchButton = BUTTON_FULLSCREEN;
                 } else {
                     currentTouchButton = BUTTON_NONE;
                 }
 
-                if (mLeftTopButtonRect.contains(downX, downY)) {
-                    currentControlButton = BUTTON_LEFT_TOP;
-                    saveCurrentLocation();
-                    break;
-                } else if (mRightTopButtonRect.contains(downX, downY)) {
-                    currentControlButton = BUTTON_RIGHT_TOP;
-                    saveCurrentLocation();
-                    break;
-                } else if (mLeftBottomButtonRect.contains(downX, downY)) {
-                    currentControlButton = BUTTON_LEFT_BOTTOM;
-                    saveCurrentLocation();
-                    break;
-                } else if (mRightBottomButtonRect.contains(downX, downY)) {
-                    currentControlButton = BUTTON_RIGHT_BOTTOM;
-                    saveCurrentLocation();
-                    break;
-                } else {
-                    currentControlButton = BUTTON_NONE;
+                if (currentTouchButton == BUTTON_NONE) {
+                    if (mLeftTopButtonRect.contains(downX, downY)) {
+                        currentControlButton = BUTTON_LEFT_TOP;
+                        saveCurrentLocation();
+                        break;
+                    } else if (mRightTopButtonRect.contains(downX, downY)) {
+                        currentControlButton = BUTTON_RIGHT_TOP;
+                        saveCurrentLocation();
+                        break;
+                    } else if (mLeftBottomButtonRect.contains(downX, downY)) {
+                        currentControlButton = BUTTON_LEFT_BOTTOM;
+                        saveCurrentLocation();
+                        break;
+                    } else if (mRightBottomButtonRect.contains(downX, downY)) {
+                        currentControlButton = BUTTON_RIGHT_BOTTOM;
+                        saveCurrentLocation();
+                        break;
+                    }
                 }
 
                 //触摸在之前绘制的区域
@@ -337,6 +345,12 @@ public class CaptureView extends View {
                             if (mOnButtonClickListener != null) {
                                 mOnButtonClickListener.onCancelClick();
                             }
+                        } else if (currentControlButton == BUTTON_FULLSCREEN) {
+                            createFullScreenRect();
+                            if (mOnButtonClickListener != null) {
+                                needClearBackground = true;
+                                mOnButtonClickListener.onConfirmClick(mSpecificRect);
+                            }
                         } else {
                             isTouchingButton = false;
                         }
@@ -350,6 +364,12 @@ public class CaptureView extends View {
                         } else if (currentTouchButton == BUTTON_CANCEL && mCancelButtonRect.contains(moveX, moveY)) {
                             if (mOnButtonClickListener != null) {
                                 mOnButtonClickListener.onCancelClick();
+                            }
+                        } else if (currentTouchButton == BUTTON_FULLSCREEN  && mFullScreenButtonRect.contains(moveX, moveY)) {
+                            createFullScreenRect();
+                            if (mOnButtonClickListener != null) {
+                                needClearBackground = true;
+                                mOnButtonClickListener.onConfirmClick(mSpecificRect);
                             }
                         } else {
                             isTouchingButton = false;
@@ -396,6 +416,10 @@ public class CaptureView extends View {
         return true;
     }
 
+    private void createFullScreenRect() {
+        mSpecificRect.set(0, 0, 0, 0);
+    }
+
     public void recreateView() {
         needClearBackground = false;
         postInvalidate();
@@ -404,6 +428,7 @@ public class CaptureView extends View {
     private void removeMenuBarAndButtons() {
         resetRect(mOkButtonRect);
         resetRect(mCancelButtonRect);
+        resetRect(mFullScreenButtonRect);
         resetRect(mLeftTopButtonRect);
         resetRect(mRightTopButtonRect);
         resetRect(mLeftBottomButtonRect);
@@ -430,46 +455,59 @@ public class CaptureView extends View {
         mOkButtonRect.left =
                 startWithRight ?
                         mSpecificRect.right - buttonWidth - mMenuBarPadding :
-                        leftLocation + mMenuBarPadding + buttonWidth;
+                        leftLocation + mMenuBarPadding + buttonWidth * 2;
         mOkButtonRect.right =
                 startWithRight ?
                         mSpecificRect.right - mMenuBarPadding :
-                        leftLocation + mMenuBarPadding + buttonWidth * 2;
+                        leftLocation + mMenuBarPadding + buttonWidth * 3;
 
         mCancelButtonRect.left =
                 startWithRight ?
                         mSpecificRect.right - buttonWidth * 2 - mMenuBarPadding :
-                        leftLocation + mMenuBarPadding;
+                        leftLocation + mMenuBarPadding + buttonWidth;
         mCancelButtonRect.right =
                 startWithRight ?
                         mSpecificRect.right - buttonWidth - mMenuBarPadding :
+                        leftLocation + mMenuBarPadding + buttonWidth * 2;
+
+        mFullScreenButtonRect.left =
+                startWithRight ?
+                        mSpecificRect.right - buttonWidth * 3 - mMenuBarPadding  :
+                        leftLocation + mMenuBarPadding;
+        mFullScreenButtonRect.right =
+                startWithRight ?
+                        mSpecificRect.right - buttonWidth * 2 - mMenuBarPadding  :
                         leftLocation + mMenuBarPadding + buttonWidth;
 
         if (mScreenHeight - bottomLocation >= buttonHeight + mButtonRadius) {//底部有足够空间
 
-            mOkButtonRect.top = bottomLocation + mButtonRadius;
-            mOkButtonRect.bottom = bottomLocation + buttonHeight + mButtonRadius;
+            int top = bottomLocation + mButtonRadius;
+            int bottom = bottomLocation + buttonHeight + mButtonRadius;
 
-            mCancelButtonRect.top = bottomLocation + mButtonRadius;
-            mCancelButtonRect.bottom = bottomLocation + buttonHeight + mButtonRadius;
+            setRectTopBottom(mOkButtonRect, top, bottom);
+            setRectTopBottom(mCancelButtonRect, top, bottom);
+            setRectTopBottom(mFullScreenButtonRect, top, bottom);
 
         } else if (topLocation > buttonHeight + mButtonRadius) {
 
-            mOkButtonRect.top = topLocation - buttonHeight - mButtonRadius;
-            mOkButtonRect.bottom = topLocation - mButtonRadius;
+            int top = topLocation - buttonHeight - mButtonRadius;
+            int bottom = topLocation - mButtonRadius;
 
-            mCancelButtonRect.top = topLocation - buttonHeight - mButtonRadius;
-            mCancelButtonRect.bottom = topLocation - mButtonRadius;
+            setRectTopBottom(mOkButtonRect, top, bottom);
+            setRectTopBottom(mCancelButtonRect, top, bottom);
+            setRectTopBottom(mFullScreenButtonRect, top, bottom);
 
         } else {
-
-            mOkButtonRect.top = bottomLocation - buttonHeight;
-            mOkButtonRect.bottom = bottomLocation;
-
-            mCancelButtonRect.top = bottomLocation - buttonHeight;
-            mCancelButtonRect.bottom = bottomLocation;
-
+            int top = bottomLocation - buttonHeight;
+            setRectTopBottom(mOkButtonRect, top, bottomLocation);
+            setRectTopBottom(mCancelButtonRect, top, bottomLocation);
+            setRectTopBottom(mFullScreenButtonRect, top, bottomLocation);
         }
+    }
+
+    private void setRectTopBottom(RectF rectTopBottom, int top, int bottom) {
+        rectTopBottom.top = top;
+        rectTopBottom.bottom = bottom;
     }
 
     private void updateZoomButtonLocation() {

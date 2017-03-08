@@ -152,15 +152,20 @@ public class ScreenShotActivity extends AppCompatActivity {
                     bmp = Bitmap.createBitmap(bmp, leftPadding, 0, rightPadding - leftPadding, height);
                 }
 
-                if (cut_width > 0 && cut_height > 0) {
-                    final Bitmap cutBitmap = Bitmap.createBitmap(bmp, left, top, cut_width, cut_height);
-                    String imagePath = SD.saveBitmap(getApplicationContext(), cutBitmap, "temp");
-                    finish();
-                    Intent intent = new Intent(getApplicationContext(), PaletteActivity.class);
-                    intent.putExtra("imagePath", imagePath);
-                    ScreenShotActivity.this.startActivity(intent);
-
+                if (bmp == null) {
+                    return;
                 }
+                if (cut_width > 0 && cut_height > 0) {
+                    bmp = Bitmap.createBitmap(bmp, left, top, cut_width, cut_height);
+                } else { //截全屏
+                    int navigationBarHeight = ScreenUtils.getNavigationBarHeight(ScreenShotActivity.this);
+                    bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight() - navigationBarHeight);
+                }
+                String imagePath = SD.saveBitmap(getApplicationContext(), bmp, "temp");
+                finish();
+                Intent intent = new Intent(getApplicationContext(), PaletteActivity.class);
+                intent.putExtra("imagePath", imagePath);
+                ScreenShotActivity.this.startActivity(intent);
                 bmp.recycle();
             }
         }, 200);
