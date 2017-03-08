@@ -40,12 +40,12 @@ public class OneShotTileService extends TileService {
 
         // 收起系统 Notification Center
         // see: http://stackoverflow.com/questions/15568754/how-to-close-the-status-bar-notification-panel-after-notification-button-click
-        Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-        getApplicationContext().sendBroadcast(it);
+//        Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+//        getApplicationContext().sendBroadcast(it);
 
         Intent intent = new Intent(getApplicationContext(), ScreenShotActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        startActivityAndCollapse(intent);
     }
 
 }
