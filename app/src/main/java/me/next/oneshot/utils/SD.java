@@ -71,7 +71,7 @@ public class SD {
     public static String savePublicBitmap(Context context, Bitmap bitmap, String fileName) {
         File imgDir = getAlbumStorageDir(FOLDER_NAME);
         String filePath = createFile(bitmap, fileName, imgDir);
-        sendBroadCast(context, imgDir);
+        sendBroadCast(context, new File(filePath));
         return filePath;
     }
 
@@ -85,7 +85,7 @@ public class SD {
     public static String saveBitmap(Context context, Bitmap bitmap, String fileName) {
         File imgDir = getAlbumStorageDir(context, FOLDER_NAME);
         String filePath = createFile(bitmap, fileName, imgDir);
-        sendBroadCast(context, imgDir);
+        sendBroadCast(context, new File(filePath));
         return filePath;
     }
 
